@@ -1,4 +1,7 @@
 library(shiny)
+library(scholar)
+library(ggplot2)
+library(igraph)
 
 ui <- fluidPage(
   titlePanel("Google Scholar Network Visualization"),
@@ -39,12 +42,8 @@ server <- function(input, output) {
   
   output$distPlot <- renderPlot({
     
-    #if(!require("devtools")) install.packages("devtools")
-    library("devtools")
-    options(unzip = 'internal')
-    #devtools::install_github("pablobarbera/scholarnetwork",force=FALSE)
-    library("scholar")
-    
+
+
     extractAuthors <- function(x){
       authors <- unlist(stringr::str_split(x, ","))
       # deleting empty authors
@@ -105,8 +104,7 @@ server <- function(input, output) {
     
     #citid <- strsplit((strsplit(input$scholarID,"&",fixed = TRUE)[[1]][1]),"=",fixed = TRUE)[[1]][2]
     d <- extractNetwork(id=input$scholarID2, n=500)
-    library(ggplot2)
-    library(igraph)
+
     # cleaning network data
     network <- graph_from_data_frame(d$edges, directed=FALSE)
     set.seed(123)
